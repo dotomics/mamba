@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mamba-ssd-int64"
+version = "0.1.0"
+description = "Loader-only copy of mamba-ssm's Triton SSD kernels with the int32-overflow fix (state-spaces/mamba#1037, #1016)."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+# No dependencies on purpose: the files import mamba_ssm (helpers, determinism
+# utils), triton and torch, which the consumer installs (mamba-ssm 2.3.2.post1).
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["mamba_ssd_int64"]
+
+# The kernel files are shipped byte-identical from this repository's
+# mamba_ssm/ops/triton/ (paths relative to this directory).
+[tool.hatch.build.targets.wheel.force-include]
+"../../LICENSE" = "mamba_ssd_int64/LICENSE"
+"../../mamba_ssm/ops/triton/ssd_bmm.py" = "mamba_ssd_int64/ssd_bmm.py"
+"../../mamba_ssm/ops/triton/ssd_chunk_state.py" = "mamba_ssd_int64/ssd_chunk_state.py"
+"../../mamba_ssm/ops/triton/ssd_state_passing.py" = "mamba_ssd_int64/ssd_state_passing.py"
+"../../mamba_ssm/ops/triton/ssd_chunk_scan.py" = "mamba_ssd_int64/ssd_chunk_scan.py"
+"../../mamba_ssm/ops/triton/layernorm_gated.py" = "mamba_ssd_int64/layernorm_gated.py"
+"../../mamba_ssm/ops/triton/k_activations.py" = "mamba_ssd_int64/k_activations.py"
+"../../mamba_ssm/ops/triton/ssd_combined.py" = "mamba_ssd_int64/ssd_combined.py"
